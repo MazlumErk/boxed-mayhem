@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class TargetController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static TargetController Instance;
+    [SerializeField] private Transform player;
+
+    private void Awake()
     {
-        
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update() {
+        TargetLookToPlayer();
+    }
+
+    public void TargetLookToPlayer()
     {
-        
+        Quaternion lookRotation = Quaternion.LookRotation(player.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 }

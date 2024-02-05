@@ -6,9 +6,9 @@ public class TargetManager : MonoBehaviour
 {
     public static TargetManager Instance;
     private Target target;
-    void Start()
+    void Awake()
     {
-
+        Instance = this;
     }
 
     public Target GetTarget()

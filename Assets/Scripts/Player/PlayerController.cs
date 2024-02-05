@@ -5,17 +5,24 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
     [SerializeField] private AudioSource shootingSound;
     [SerializeField, Range(0.1f, 9f)] private float sensitivity = 2f;
     [SerializeField, Range(0f, 90f)] private float xRotationLimit = 88f;
+    [SerializeField] private Transform target;
 
     private Vector2 rotation = Vector3.zero;
     private const string xAxis = "Mouse X";
     private const string yAxis = "Mouse Y";
 
-    private void Start()
+    private void Awake()
     {
-        // LockAndHideCursor();
+        Instance = this;
+    }
+
+    public void SetMouseSensitivity(float newMouseSensitivity)
+    {
+        sensitivity = newMouseSensitivity;
     }
 
     private void Update()
@@ -29,17 +36,12 @@ public class PlayerController : MonoBehaviour
             {
                 Fire();
             }
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                LevelManager.Instance.SetLevel(GameStatus.Pause);
-            }
         }
-    }
 
-    private void LockAndHideCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (LevelManager.Instance.GetLevel().gameStatus == GameStatus.Finished)
+        {
+            ShowTargetToPlayer();
+        }
     }
 
     private void HandleRotationInput()
@@ -76,5 +78,11 @@ public class PlayerController : MonoBehaviour
                 shootingSound.Play();
             }
         }
+    }
+
+    public void ShowTargetToPlayer()
+    {
+        Quaternion lookRotation = Quaternion.LookRotation(target.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 3f);
     }
 }
