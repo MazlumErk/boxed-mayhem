@@ -42,7 +42,7 @@ public class CanvasManager : MonoBehaviour
     public void UiTextUpdate()
     {
         playerScore.text = $"Score: {PlayerManager.Instance.GetPlayer().score}";
-        fpsLimitText.text = $"Fps: {SettingsManager.Instance.GetChoosenFps()}";
+        fpsLimitText.text = SettingsManager.Instance.GetChoosenFps() == 0 ? "Fps: No Limit" : $"Fps: {SettingsManager.Instance.GetChoosenFps()}";
         mouseSensitivityText.text = $"Mouse Sensitivity: %{SettingsManager.Instance.GetMouseSensivityPercent()}";
     }
 
