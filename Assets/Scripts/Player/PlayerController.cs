@@ -73,6 +73,14 @@ public class PlayerController : MonoBehaviour
             {
                 TargetSpawner.Instance.SetNewPosition();
                 PlayerManager.Instance.SetPlayer(newScore: PlayerManager.Instance.GetPlayer().score + 1);
+                if (CanvasManager.Instance.GetCount() >= 1)
+                {
+                    PlayerManager.Instance.SetPlayer(newCombo: PlayerManager.Instance.GetPlayer().combo + 1);
+                }
+                else
+                {
+                    PlayerManager.Instance.SetPlayer(newCombo: 0);
+                }
                 CanvasManager.Instance.ResetCount();
                 CanvasManager.Instance.UiTextUpdate();
                 shootingSound.Play();

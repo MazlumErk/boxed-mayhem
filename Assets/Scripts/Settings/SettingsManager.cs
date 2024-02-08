@@ -11,6 +11,7 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private Slider mouseSensitivitySlider;
     [System.NonSerialized][SerializeField] private List<int> fpsLimits = new() { 30, 60, 75, 120, 144, 240, 0 };
     [SerializeField] private int choosenFps;
+    [SerializeField] private GameObject settingsMenu;
 
     private void Awake()
     {
@@ -77,5 +78,10 @@ public class SettingsManager : MonoBehaviour
     public float GetMouseSensivityPercent()
     {
         return Convert.ToInt32((mouseSensitivitySlider.value / mouseSensitivitySlider.maxValue) * 100);
+    }
+
+    public void SettingsMenuOpenClose()
+    {
+        settingsMenu.SetActive(!settingsMenu.activeInHierarchy);
     }
 }

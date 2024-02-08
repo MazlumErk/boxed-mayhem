@@ -17,11 +17,12 @@ public class PlayerManager : MonoBehaviour
         return player;
     }
 
-    public void SetPlayer(int? newScore = null)
+    public void SetPlayer(int? newScore = null, int? newCombo = null)
     {
         player = new Player()
         {
             score = newScore == null ? player.score : newScore.Value,
+            combo = newCombo == null ? player.combo : newCombo.Value,
         };
     }
 }
