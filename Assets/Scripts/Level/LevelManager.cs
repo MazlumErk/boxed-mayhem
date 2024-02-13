@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
-    public static LevelManager Instance;
+    // public static LevelManager Instance;
     [SerializeField] private Level level;
     [SerializeField] private AudioSource audioSource;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
+    // private void Awake()
+    // {
+    //     Instance = this;
+    // }
 
     public Level GetLevel()
     {
@@ -31,6 +31,7 @@ public class LevelManager : MonoBehaviour
     public void GameFinished()
     {
         LevelManager.Instance.SetLevel(GameStatus.Finished);
+        PlayerManager.Instance.SetPlayerHighScore(PlayerManager.Instance.GetPlayer().score);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         CanvasManager.Instance.CanvasChanger();

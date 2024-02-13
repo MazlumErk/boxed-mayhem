@@ -5,79 +5,88 @@ using UnityEngine.UI;
 using System;
 
 
-public class SettingsManager : MonoBehaviour
+public class SettingsManager : Singleton<SettingsManager>
 {
-    public static SettingsManager Instance;
-    [SerializeField] private Slider mouseSensitivitySlider;
-    [System.NonSerialized][SerializeField] private List<int> fpsLimits = new() { 30, 60, 75, 120, 144, 240, 0 };
-    [SerializeField] private int choosenFps;
+    [SerializeField] private SettingsManagerType settingsManagerType;
+    [SerializeField] private Slider mouseSensitivitySlider, soundPercentSlider;
+    [SerializeField] private List<AudioSource> audioSources;
+    private List<int> fpsLimits = new() { 30, 60, 75, 120, 144, 240, 0 };
     [SerializeField] private GameObject settingsMenu;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
     private void Start()
     {
-        // 75
-        choosenFps = fpsLimits[2];
-        Application.targetFrameRate = choosenFps;
+        mouseSensitivitySlider.value = settingsManagerType.choosenMouseSensivity;
+        Application.targetFrameRate = settingsManagerType.choosenFps;
         SetSliderValues();
     }
 
     private void SetSliderValues()
     {
-        mouseSensitivitySlider.maxValue = 9f;
-        mouseSensitivitySlider.minValue = 0.1f;
-        mouseSensitivitySlider.value = 2;
+        mouseSensitivitySlider.value = settingsManagerType.choosenMouseSensivity;
+        soundPercentSlider.value = settingsManagerType.choosenSoundPercent;
     }
 
     private void SetFps()
     {
-        Application.targetFrameRate = choosenFps;
+        Application.targetFrameRate = settingsManagerType.choosenFps;
     }
 
     public void ChangeMouseSensitivity()
     {
+        settingsManagerType.choosenMouseSensivity = mouseSensitivitySlider.value;
         PlayerController.Instance.SetMouseSensitivity(mouseSensitivitySlider.value);
+    }
+
+    public void ChangeSoundPercent()
+    {
+        settingsManagerType.choosenSoundPercent = soundPercentSlider.value;
+        for (int i = 0; i < audioSources.Count; i++)
+        {
+            audioSources[i].volume = soundPercentSlider.value;
+        }
     }
 
     public void IncreaseFps()
     {
-        int choosenFpsIndex = fpsLimits.IndexOf(choosenFps);
+        int choosenFpsIndex = fpsLimits.IndexOf(settingsManagerType.choosenFps);
         if (choosenFpsIndex == fpsLimits.Count - 1)
         {
-            choosenFps = fpsLimits[0];
+            settingsManagerType.choosenFps = fpsLimits[0];
         }
         else
         {
-            choosenFps = fpsLimits[choosenFpsIndex + 1];
+            settingsManagerType.choosenFps = fpsLimits[choosenFpsIndex + 1];
         }
         SetFps();
     }
 
     public void DecreaseFps()
     {
-        int choosenFpsIndex = fpsLimits.IndexOf(choosenFps);
+        int choosenFpsIndex = fpsLimits.IndexOf(settingsManagerType.choosenFps);
         if (choosenFpsIndex == 0)
         {
-            choosenFps = fpsLimits[fpsLimits.Count - 1];
+            settingsManagerType.choosenFps = fpsLimits[fpsLimits.Count - 1];
         }
         else
         {
-            choosenFps = fpsLimits[choosenFpsIndex - 1];
+            settingsManagerType.choosenFps = fpsLimits[choosenFpsIndex - 1];
         }
         SetFps();
     }
 
     public int GetChoosenFps()
     {
-        return choosenFps;
+        return settingsManagerType.choosenFps;
     }
 
     public float GetMouseSensivityPercent()
     {
         return Convert.ToInt32((mouseSensitivitySlider.value / mouseSensitivitySlider.maxValue) * 100);
+    }
+
+    public float GetSoundPercent()
+    {
+        return Convert.ToInt32((soundPercentSlider.value / soundPercentSlider.maxValue) * 100);
     }
 
     public void SettingsMenuOpenClose()

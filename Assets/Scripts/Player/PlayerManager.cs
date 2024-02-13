@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : Singleton<PlayerManager>
 {
-    public static PlayerManager Instance;
+    [SerializeField] private PlayerManagerType playerManagerType;
     private Player player;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     public Player GetPlayer()
     {
         return player;
+    }
+
+    public void SetPlayerHighScore(int newHighScore)
+    {
+        playerManagerType.playerHighScore = playerManagerType.playerHighScore < newHighScore ? newHighScore : playerManagerType.playerHighScore;
     }
 
     public void SetPlayer(int? newScore = null, int? newCombo = null)
@@ -24,5 +24,10 @@ public class PlayerManager : MonoBehaviour
             score = newScore == null ? player.score : newScore.Value,
             combo = newCombo == null ? player.combo : newCombo.Value,
         };
+    }
+
+    public int GetPlayerHighScore()
+    {
+        return playerManagerType.playerHighScore;
     }
 }

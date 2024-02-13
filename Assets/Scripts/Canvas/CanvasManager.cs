@@ -5,22 +5,15 @@ using TMPro;
 using UnityEngine.UI;
 using JetBrains.Annotations;
 
-public class CanvasManager : MonoBehaviour
+public class CanvasManager : Singleton<CanvasManager>
 {
-    public static CanvasManager Instance;
-
 
     public TextMeshProUGUI playerScore, finalScore, fpsLimitText, mouseSensitivityText, fpsText;
-    public TextMeshProUGUI comboText;
+    public TextMeshProUGUI comboText, soundPercentText, playerHighScoreText;
     [SerializeField] public float countDown;
     [SerializeField] private Slider count;
     [SerializeField] private GameObject gameCanvas, menuCanvas, gameFinishCanvas;
     [SerializeField] private float smoothness = 0.1f, currentFPS;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     private void Start()
     {
@@ -46,6 +39,8 @@ public class CanvasManager : MonoBehaviour
         fpsLimitText.text = SettingsManager.Instance.GetChoosenFps() == 0 ? "Fps: No Limit" : $"Fps: {SettingsManager.Instance.GetChoosenFps()}";
         mouseSensitivityText.text = $"Mouse Sensitivity: %{SettingsManager.Instance.GetMouseSensivityPercent()}";
         comboText.text = PlayerManager.Instance.GetPlayer().combo != 0 ? $"Combo {PlayerManager.Instance.GetPlayer().combo}X" : "";
+        soundPercentText.text = $"Sound: %{SettingsManager.Instance.GetSoundPercent()}";;
+        playerHighScoreText.text = $"Best Score: {PlayerManager.Instance.GetPlayerHighScore()}";
     }
 
 

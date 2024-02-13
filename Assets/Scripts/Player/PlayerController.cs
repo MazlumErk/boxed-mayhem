@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance;
     [SerializeField] private AudioSource shootingSound;
     [SerializeField, Range(0.1f, 9f)] private float sensitivity = 2f;
-    [SerializeField, Range(0f, 90f)] private float xRotationLimit = 88f;
+    [SerializeField, Range(0f, 100f)] private float xRotationLimit = 90f;
     [SerializeField] private Transform target;
 
     private Vector2 rotation = Vector3.zero;
